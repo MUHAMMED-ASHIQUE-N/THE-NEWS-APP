@@ -5,6 +5,7 @@
   import axios from '../Axios';
   import { API_KEY } from '../Constans/Constant';
   import MainNewsCard from '../Components/MainNewsCard';
+import Footer from '../Components/Footer';
 
   const SORT_OPTIONS = ["Newest to Oldest", "Oldest to Newest", "Trending", "Default"];
 
@@ -129,6 +130,7 @@
           </div>
         )}
       </div>
+      <Footer/>
     </div>
   );
 };
