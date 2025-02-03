@@ -4,11 +4,11 @@ import React from 'react'
 
 
 
-const NewsCard = ({news}) => {
+const MainNewsCard = ({news}) => {
 
 
   return (
-    <div className='grid grid-cols-2 gap-4'>
+    <div className='grid md:grid-cols-2 gap-4'>
   { news.map((data) =>(
     <div key={data.id} className='border border-zinc-600 flex flex-col mx-auto gap-2   rounded-md '>
         <div className='w-full'  >
@@ -25,4 +25,4 @@ const NewsCard = ({news}) => {
   )
 }
 
-export default NewsCard
+export default MainNewsCard

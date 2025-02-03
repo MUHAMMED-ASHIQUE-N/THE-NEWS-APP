@@ -1,14 +1,22 @@
+import React from 'react';
 
-import React from 'react'
 
-const Filter = () => {
+const category =['Technology','Sports','Business','Entertainment']
+
+const Filter = ({filter,onFilterChange}) => {
+
+
+
+ const handleFilterValue = (val) =>{
+console.log(val)
+onFilterChange(val)
+
+ }
   return (
-    <div className='flex items-center justify-center gap-4 py-2 border-b border-gray-200 dark:border-gray-500 dark:text-white dark:bg-gray-900'>
-      <p>Technology</p>
-      <p>Sports</p>
-      <p>Business</p>
-      <p>Entertainment</p>
-      <p>Health</p>
+    <div className='flex items-center justify-center gap-4 py-2 border-b border-gray-500 dark:border-gray-500 dark:text-white dark:bg-gray-900'>
+      {category.map((val, index) => (
+        <p onClick={()=>handleFilterValue(val)} key={index}  className={`cursor-pointer ${filter === val ? "font-bold" : ""}`} >{val}</p>
+      ))}
   
     </div>
   )
