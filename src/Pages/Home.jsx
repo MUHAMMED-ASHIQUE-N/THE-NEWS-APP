@@ -12,11 +12,11 @@
   const [sortOption, setSortOption] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [news, setNews] = useState([]);
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('general');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Handle sorting options
+ 
   const handleSortChange = (option) => {
     setSortOption(option);
     setShowDropdown(false);
@@ -35,12 +35,11 @@
     }
   };
 
-  // Handle filter change
+
   const handleFilterChange = (val) => {
     setCategory(val.toLowerCase());
   };
 
-  // Handle search input change
   const handleSearchChange = (e) => {
    
     
@@ -48,13 +47,13 @@
     console.log(e.target.value);
   };
 
-  // Fetch news from API
+
   const fetchNews = useCallback(() => {
     setLoading(true);
     axios.get(`?category=${category}&keywords=${searchQuery}&language=en&apiKey=${API_KEY}`)
       .then((response) => {
         console.log("Fetched News:", response.data.news);
-        setNews(response.data.news || []); // Ensure empty array if no results
+        setNews(response.data.news || []); 
       })
       .catch((error) => console.error("Error fetching news:", error))
       .finally(() => setLoading(false));
@@ -65,7 +64,7 @@
   }, [fetchNews]);
 
   return (
-    <div className='bg-blue-100 dark:bg-neutral-800 dark:text-white h-auto w-full'>
+    <div className='bg-blue-100 dark:bg-black dark:text-white h-auto w-full'>
       <Navbar />
       <Filter onFilterChange={handleFilterChange} />
 
@@ -113,11 +112,10 @@
         </div>
       </div>
 
-      <div className='mx-auto w-[80%]'>
-        {/* Spinner while loading */}
+      <div className='mx-auto w-[90%] md:w-[80%]'>
         {loading ? (
           <div className="flex justify-center items-center h-screen">
-            <div className="w-10 h-10 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+            <div className="w-14 h-14 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
           </div>
         ) : news.length > 0 ? (
           // Show news articles if found
