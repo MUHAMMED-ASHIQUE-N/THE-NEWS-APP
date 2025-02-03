@@ -1,32 +1,32 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import Navbar from '../Components/Navbar';
-import Filter from '../Components/Filter';
-import downArrow from "../assets/down-arrow.svg";
-import axios from '../Axios';
-import { API_KEY } from '../Constans/Constant';
-import MainNewsCard from '../Components/MainNewsCard';
+  import React, { useCallback, useEffect, useState } from 'react';
+  import Navbar from '../Components/Navbar';
+  import Filter from '../Components/Filter';
+  import downArrow from "../assets/down-arrow.svg";
+  import axios from '../Axios';
+  import { API_KEY } from '../Constans/Constant';
+  import MainNewsCard from '../Components/MainNewsCard';
 
+  const SORT_OPTIONS = ["Newest to Oldest", "Oldest to Newest", "Trending", "Default"];
 
-
-const SORT_OPTIONS = ["Newest to Oldest", "Oldest to Newest", "Trending", "Default"];
-
-
-const Home = () => {
+  const Home = () => {
   const [sortOption, setSortOption] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [news, setNews] = useState([]);
-  const [category, setCategory] = useState('general');
+  const [category, setCategory] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(false);
 
+  // Handle sorting options
   const handleSortChange = (option) => {
     setSortOption(option);
     setShowDropdown(false);
 
     if (option === "Trending") {
-      setCategory("trending"); 
+      setCategory("trending");
     } else if (option === "Default") {
-      setCategory("general"); 
+      setCategory("general");
     } else {
-      const sortedNews = [...news].sort((a, b) => 
+      const sortedNews = [...news].sort((a, b) =>
         option === "Oldest to Newest"
           ? new Date(a.published) - new Date(b.published)
           : new Date(b.published) - new Date(a.published)
@@ -35,15 +35,30 @@ const Home = () => {
     }
   };
 
+  // Handle filter change
   const handleFilterChange = (val) => {
-    setCategory(val.toLowerCase()); // No need to store an extra filter state
+    setCategory(val.toLowerCase());
   };
 
+  // Handle search input change
+  const handleSearchChange = (e) => {
+   
+    
+    setSearchQuery(e.target.value.toLowerCase());
+    console.log(e.target.value);
+  };
+
+  // Fetch news from API
   const fetchNews = useCallback(() => {
-    axios.get(`?&category=${category}&language=en&apiKey=${API_KEY}`)
-      .then((response) => setNews(response.data.news))
-      .catch((error) => console.error("Error fetching news:", error));
-  }, [category]);
+    setLoading(true);
+    axios.get(`?category=${category}&keywords=${searchQuery}&language=en&apiKey=${API_KEY}`)
+      .then((response) => {
+        console.log("Fetched News:", response.data.news);
+        setNews(response.data.news || []); // Ensure empty array if no results
+      })
+      .catch((error) => console.error("Error fetching news:", error))
+      .finally(() => setLoading(false));
+  }, [category, searchQuery]);
 
   useEffect(() => {
     fetchNews();
@@ -53,21 +68,36 @@ const Home = () => {
     <div className='bg-blue-100 dark:bg-neutral-800 dark:text-white h-auto w-full'>
       <Navbar />
       <Filter onFilterChange={handleFilterChange} />
-      <div className='mx-auto w-[80%]'>
-        <div className='py-5 flex flex-col md:flex-row justify-center items-center gap-4 relative'>
-          <input type="text" className='border md:w-[50%] w-full px-4 py-2 rounded-full' />
-          
-          <div>
-            <button
-              className='px-4 py-2 border rounded-full bg-black text-white font-semibold flex items-center justify-center cursor-pointer dark:border-none dark:bg-indigo-600 relative'
-              onClick={() => setShowDropdown(!showDropdown)}
-            >
-              <span>{sortOption || "default"}</span>
-              <img src={downArrow} className='w-5 h-5 pt-1 ml-2' alt="Dropdown Icon" />
-            </button>
-            {showDropdown && (
-              <div className='absolute top-16 bg-white dark:bg-neutral-700 border rounded-md shadow-md w-44'>
-                <ul className="py-2">
+
+      <div className='mx-auto w-[80%] py-5 flex flex-col md:flex-row justify-center items-center gap-4 relative'>
+        {/* Search Input */}
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          placeholder="Search news..."
+          className='border md:w-[50%] w-full px-4 py-2 rounded-full'
+        />
+        <button
+          onClick={fetchNews}
+          className="px-4 py-2 bg-indigo-600 text-white rounded-full"
+        >
+          Search
+        </button>
+
+        {/* Sorting Dropdown */}
+        <div>
+          <button
+            className='px-4 py-2 border rounded-full bg-black text-white font-semibold flex items-center cursor-pointer dark:border-none dark:bg-indigo-600 relative'
+            onClick={() => setShowDropdown(!showDropdown)}
+          >
+            <span>{sortOption || "Default"}</span>
+            <img src={downArrow} className='w-5 h-5 pt-1 ml-2' alt="Dropdown Icon" />
+          </button>
+
+          {showDropdown && (
+            <div className='absolute top-16 bg-white dark:bg-neutral-700 border rounded-md shadow-md w-44'>
+              <ul className="py-2">
                 {SORT_OPTIONS.map((option) => (
                   <li
                     key={option}
@@ -78,13 +108,28 @@ const Home = () => {
                   </li>
                 ))}
               </ul>
-              </div>
-            )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className='mx-auto w-[80%]'>
+        {/* Spinner while loading */}
+        {loading ? (
+          <div className="flex justify-center items-center h-screen">
+            <div className="w-10 h-10 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
           </div>
-        </div>
-        <div className='py-10'>
-          <MainNewsCard news={news} />
-        </div>
+        ) : news.length > 0 ? (
+          // Show news articles if found
+          <div className='py-10'>
+            <MainNewsCard news={news} />
+          </div>
+        ) : (
+          // Show "No articles found" if no results
+          <div className="py-10 text-center text-lg text-gray-500">
+            No articles found. Try another search!
+          </div>
+        )}
       </div>
     </div>
   );
