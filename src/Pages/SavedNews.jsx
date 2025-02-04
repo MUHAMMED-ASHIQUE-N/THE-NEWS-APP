@@ -40,7 +40,6 @@ const SavedNews = () => {
                   {article.description || "No description available."}
                 </p>
 
-                {/* Remove Button */}
                 <button
                   onClick={() => handleRemove(article.id)}
                   className="bg-red-500 px-4 py-1 rounded-full font-semibold text-white mt-4 hover:bg-red-600 transition"

@@ -85,7 +85,6 @@ import Footer from '../Components/Footer';
           Search
         </button>
 
-        {/* Sorting Dropdown */}
         <div>
           <button
             className='px-4 py-2 border rounded-full bg-black text-white font-semibold flex items-center cursor-pointer dark:border-none dark:bg-indigo-600 relative'
@@ -119,12 +118,10 @@ import Footer from '../Components/Footer';
             <div className="w-14 h-14 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
           </div>
         ) : news.length > 0 ? (
-          // Show news articles if found
           <div className='py-10'>
             <MainNewsCard news={news} />
           </div>
         ) : (
-          // Show "No articles found" if no results
           <div className="py-10 text-center text-lg text-gray-500">
             No articles found. Try another search!
           </div>
