@@ -70,7 +70,6 @@ import Footer from '../Components/Footer';
       <Filter onFilterChange={handleFilterChange} />
 
       <div className='mx-auto w-[80%] py-5 flex flex-col md:flex-row justify-center items-center gap-4 relative'>
-        {/* Search Input */}
         <input
           type="text"
           value={searchQuery}
