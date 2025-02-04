@@ -42,7 +42,6 @@ const MainNewsCard = ({ news }) => {
             </p>
           </div>
 
-          {/* Buttons */}
           <div className="flex justify-between items-center px-4 pb-4">
             <button
               onClick={() => navigate(`/article/${data.id}`, { state: { articleData: data } })}
