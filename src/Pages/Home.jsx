@@ -51,7 +51,7 @@ import Footer from '../Components/Footer';
 
   const fetchNews = useCallback(() => {
     setLoading(true);
-    axios.get(`?category=${category}&keywords=${searchQuery}&language=en&apiKey=${API_KEY}`)
+    axios.get(`?category=${category}&keywords=${o}&language=en&apiKey=${API_KEY}`)
       .then((response) => {
         console.log("Fetched News:", response.data.news);
         setNews(response.data.news || []); 
@@ -63,7 +63,7 @@ import Footer from '../Components/Footer';
   useEffect(() => {
     fetchNews();
   }, [fetchNews]);
-
+  
   return (
     <div className='bg-blue-100 dark:bg-black dark:text-white h-auto w-full'>
       <Navbar />
