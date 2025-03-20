@@ -6,8 +6,8 @@ import Navbar from "../Components/Navbar";
 const Article = () => {
   const { id } = useParams(); 
   const location = useLocation();
-  const { articleData } = location.state  {}; 
-  const [article, setArticle] = useState(articleData  null);
+  const { articleData } = location.state || {}; 
+  const [article, setArticle] = useState(articleData || null);
 
 let news = [article]
  

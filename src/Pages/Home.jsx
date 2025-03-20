@@ -20,6 +20,7 @@ import Footer from '../Components/Footer';
  
   const handleSortChange = (option) => {
     setSortOption(option);
+    o
     setShowDropdown(false);
 
     if (option === "Trending") {
@@ -51,7 +52,7 @@ import Footer from '../Components/Footer';
 
   const fetchNews = useCallback(() => {
     setLoading(true);
-    axios.get(`?category=${category}&keywords=${o}&language=en&apiKey=${API_KEY}`)
+    axios.get(`?category=${category}&keywords=${searchQuery}&language=en&apiKey=${API_KEY}`)
       .then((response) => {
         console.log("Fetched News:", response.data.news);
         setNews(response.data.news || []); 
